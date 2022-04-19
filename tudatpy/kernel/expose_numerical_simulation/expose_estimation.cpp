@@ -127,7 +127,11 @@ void expose_estimation(py::module &m) {
             .def_property_readonly("concatenated_times", &tom::ObservationCollection<>::getConcatenatedTimeVector,
                                    get_docstring("ObservationCollection.concatenated_times").c_str() )
             .def_property_readonly("concatenated_observations", &tom::ObservationCollection<>::getObservationVector,
-                                   get_docstring("ObservationCollection.concatenated_observations").c_str() );
+                                   get_docstring("ObservationCollection.concatenated_observations").c_str() )
+            .def_property_readonly("concatenated_link_ends", &tom::ObservationCollection<>::getConcatenatedLinkEndIds,
+                                   get_docstring("ObservationCollection.concatenated_link_ends").c_str() )
+            .def_property_readonly("concatenated_link_end_names", &tom::ObservationCollection<>::getConcatenatedLinkEndIdNames,
+                                   get_docstring("ObservationCollection.concatenated_link_end_names").c_str() );
 
     /*!
      *************** STATE TRANSITION INTERFACE ***************
@@ -233,6 +237,10 @@ void expose_estimation(py::module &m) {
                   &tss::PodInput<double, double>::setConstantWeightsMatrix,
                   py::arg( "weight" ),
                   get_docstring("PodInput.set_constant_weight").c_str() )
+            .def("set_weight",
+                 &tss::PodInput<double, double>::setWeightsMatrix,
+                 py::arg("weight_vector"),
+                 get_docstring("PodInput.set_weight_vector").c_str() )
             .def( "set_constant_weight_per_observable",
                   &tss::PodInput<double, double>::setConstantPerObservableWeightsMatrix,
                   py::arg( "weight_per_observable" ),
@@ -287,6 +295,10 @@ void expose_estimation(py::module &m) {
             .def_readonly("normalization_terms",
                                    &tss::PodOutput<double, double>::informationMatrixTransformationDiagonal_,
                                    get_docstring("PodOutput.normalization_terms").c_str() )
+            .def_readonly("parameter_estimate",&tss::PodOutput<double, double>::parameterEstimate_,
+                          get_docstring("PodOutput.parameter_estimate").c_str() )
+            .def_readonly("weights_matrix_diagonal",&tss::PodOutput<double, double>::weightsMatrixDiagonal_,
+                          get_docstring("PodOutput.weights_matrix_diagonal").c_str() )
             .def_readonly("final_residuals",
                                    &tss::PodOutput<double, double>::residuals_,
                                    get_docstring("PodOutput.final_residuals").c_str() );
